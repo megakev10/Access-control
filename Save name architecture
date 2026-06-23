@@ -1,0 +1,13 @@
+Ceci est l'architecture d'assocaition de noms a la biblio Adafruit sensor.
+Objectif: Chaque empreinte enregistree doit etre associe a un nom.
+Logique attendue:
+>> Lorsque la fonction "enroll" est lancee, au niveau du choix de l'ID a associer a l'empreinte, il doit aussi etre demande le nom de l'utilisateur.
+>> Le nom defini doit etre lie a l'ID et a l'empreinte.
+>> A Chaque reconnaissance de l'empreinte, le nom doit etre specifie.
+Mecanisme a mettre en place:
+    Dans un save_name.cpp:
+        >> Je vais creer une classe avec pour attributs, un nom (char[]), un pointeur vers un "uint16_t" (pour pointer vers l'ID).
+        >> Une fonction va recuperer le nom.
+        >> A Chaque enroll, un objet est cree dans le main() et le nom + ID entres sont associes a cet objet.
+        >> A Chaque reconnaissance de l'empreinte, les attributs de l'objet sont affiches (bon juste le nom puisque la biblio se charge deja de l'ID)
+        >> Les evolutions viendront plus tard.
