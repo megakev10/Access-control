@@ -1,4 +1,4 @@
-#include <Arduino.h>
+/*#include <Arduino.h>
 #include <HTTPClient.h>
 #include <WiFi.h>
 
@@ -35,5 +35,5 @@ void loop(){
     }else{
         Serial.println("Succes");
     }
-}
+}*/
 

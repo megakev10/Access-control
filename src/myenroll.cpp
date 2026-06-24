@@ -1,3 +1,33 @@
+#include <Arduino.h>
+#include <Preferences.h>
+#include <Adafruit_Fingerprint.h>
+
+Preferences pref;
+int d;
+
+class identification{
+    public:
+    String take_name(uint8_t index);
+    void Saving(String na);
+    private:
+    String name;
+    String names_array[129];
+};
+
+String identification::take_name(uint8_t index){
+    while (!Serial.available()){}
+    names_array[index] = Serial.readStringUntil('\n'); 
+    return names_array[index];   
+}
+
+void identification::Saving(String na){
+    pref.begin("users_infos", false);
+        pref.putString("names", na);
+    pref.end();
+}
+
+
+
 /***************************************************
   This is an example sketch for our optical Fingerprint sensor
 
@@ -16,8 +46,6 @@
   BSD license, all text above must be included in any redistribution
  ****************************************************/
 
-#include <Adafruit_Fingerprint.h>
-
 #if (defined(__AVR__) || defined(ESP8266)) && !defined(__AVR_ATmega2560__)
 // For UNO and others without hardware serial, we must use software serial...
 // pin #2 is IN from sensor (GREEN wire)
@@ -33,11 +61,11 @@ SoftwareSerial mySerial(2, 3);
 #endif
 
 Adafruit_Fingerprint finger = Adafruit_Fingerprint(&mySerial);
-
+identification identity;
 uint8_t id;
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(115200);
   while (!Serial)
     ; // For Yun/Leo/Micro/Zero/...
   delay(100);
@@ -90,11 +118,17 @@ void loop() // run over and over again
   Serial.println("Please type in the ID # (from 1 to 127) you want to save "
                  "this finger as...");
   id = readnumber();
+
   if (id == 0) { // ID #0 not allowed, try again!
     return;
   }
+  
+  Serial.println(" Quel est votre nom? ");
+  String n = identity.take_name(id);
   Serial.print("Enrolling ID #");
   Serial.println(id);
+  Serial.print("Associate name: ");
+  Serial.println(n);
 
   while (!getFingerprintEnroll())
     ;
